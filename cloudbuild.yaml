@@ -1,0 +1,25 @@
+# Simple Declarative Cloud Build - Deploy from Source
+# Minimal configuration for FastAPI deployment to Cloud Run
+
+substitutions:
+  _REGION: "europe-north2"
+  _SERVICE_NAME: "demo-api"
+
+steps:
+  # Deploy FastAPI from source - Cloud Run auto-detects Python
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
+      - '--source=.'
+      - '--region=${_REGION}'
+      - '--allow-unauthenticated'
+      - '--set-env-vars=FASTAPI_ENV=production'
+
+  # Test the deployment
+  - name: 'gcr.io/cloud-builders/curl'
+    args: 
+      - '--fail'
+      - '--silent'
+      - 'https://${_SERVICE_NAME}-${PROJECT_ID}.a.run.app/health'
