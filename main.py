@@ -10,4 +10,4 @@ def health():
 
 @app.get("/v1/hello")
 def hello_v1(name: str = "World"):
-    return {"message": f"Hello, {name}! (v1)"}
+    return {"message": f"Hello, {name}! (v2)"}
